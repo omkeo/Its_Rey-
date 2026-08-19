@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#05030d">
+<title>A Little Universe for Suprita — Rey ✨</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Georgia,"Times New Roman",serif;background:#05030d;color:#fff}
+button{font:inherit}
+#app{position:fixed;inset:0;overflow:hidden}
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.035);transition:opacity 1.1s ease,transform 1.35s cubic-bezier(.16,1,.3,1)}
+.scene.active{opacity:1;visibility:visible;pointer-events:auto;transform:scale(1)}
+.noise{position:absolute;inset:0;opacity:.045;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E")}
+
+/* shared */
+.center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(900px,90%);text-align:center;z-index:20}
+.kicker{font:600 10px/1 Arial,sans-serif;letter-spacing:7px;text-transform:uppercase;opacity:.55;margin-bottom:22px}
+.title{font-size:clamp(43px,7vw,88px);line-height:1.02;font-weight:400}
+.sub{font:15px/1.75 Arial,sans-serif;color:rgba(255,255,255,.66);margin:24px auto 30px;max-width:650px}
+.btn{position:relative;border:1px solid rgba(255,255,255,.3);color:#fff;background:rgba(255,255,255,.075);backdrop-filter:blur(18px);padding:16px 28px;border-radius:999px;cursor:pointer;letter-spacing:.2px;box-shadow:0 12px 40px rgba(0,0,0,.28),inset 0 0 18px rgba(255,255,255,.035);transition:.4s;overflow:hidden}
+.btn:before{content:"";position:absolute;inset:0;left:-120%;width:70%;transform:skewX(-25deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transition:.8s}
+.btn:hover:before{left:150%}.btn:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 18px 55px rgba(150,100,255,.25)}.btn:active{transform:scale(.97)}
+
+/* 1 */
+#s1{background:radial-gradient(circle at 50% 45%,#21154c 0,#0b0921 34%,#03030b 78%);overflow:hidden}
+#s1 .neb{position:absolute;width:65vw;height:65vw;border-radius:50%;filter:blur(75px);opacity:.2}
+#s1 .n1{left:-25%;top:-25%;background:#7654d6;animation:drift 14s ease-in-out infinite alternate}
+#s1 .n2{right:-25%;bottom:-30%;background:#3b68c7;animation:drift 17s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(70px,-45px) scale(1.15)}}
+.moon{position:absolute;right:9%;top:8%;width:clamp(80px,11vw,145px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#e5e3f5 58%,#aaa8c6);box-shadow:0 0 45px rgba(230,230,255,.35),0 0 130px rgba(130,130,220,.16);animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px)}}
+#stars,.starsFinal{position:absolute;inset:0}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.35;animation:twinkle var(--d) ease-in-out infinite var(--delay)}
+@keyframes twinkle{50%{opacity:1;transform:scale(1.6)}}
+.shoot{position:absolute;width:140px;height:1px;background:linear-gradient(90deg,transparent,#fff,transparent);transform:rotate(-28deg);animation:shoot 8s linear infinite;opacity:0}
+.shoot.a{top:18%;left:5%}.shoot.b{top:38%;left:58%;animation-delay:4s}
+@keyframes shoot{0%{transform:translate(-120px,-100px) rotate(-28deg);opacity:0}5%{opacity:.9}16%{transform:translate(500px,300px) rotate(-28deg);opacity:0}100%{opacity:0}}
+.s1title{background:linear-gradient(110deg,#fff,#d9d0ff,#fff,#f2d9ff,#fff);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:300%}}
+.secret{height:28px;margin:20px auto 0;font:13px Arial,sans-serif;color:#aaa3c5;opacity:0;animation:softin 1.3s 1.5s forwards}
+@keyframes softin{to{opacity:1}}
+
+/* 2 */
+#s2{background:linear-gradient(180deg,#08041c,#17103a 45%,#071714);overflow:hidden}
+#s2:after{content:"";position:absolute;left:-10%;bottom:-18%;width:120%;height:48%;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at center top,#1b4738,#071d19 65%,#020b09);box-shadow:0 -30px 80px rgba(70,190,135,.08)}
+.gmoon{position:absolute;right:13%;top:9%;width:100px;aspect-ratio:1;border-radius:50%;background:#efecff;box-shadow:0 0 75px rgba(220,210,255,.35)}
+.fire{position:absolute;width:4px;height:4px;border-radius:50%;background:#ffe9a0;box-shadow:0 0 14px #ffe9a0;animation:fire var(--d) ease-in-out infinite alternate}
+@keyframes fire{to{transform:translate(var(--x),var(--y));opacity:.15}}
+.bfly{position:absolute;font-size:27px;z-index:8;filter:drop-shadow(0 0 10px rgba(255,160,225,.65));animation:bfly var(--d) linear infinite var(--delay);opacity:0}
+@keyframes bfly{0%{transform:translate(-10vw,20vh) rotate(10deg) scale(.5);opacity:0}10%{opacity:1}45%{transform:translate(48vw,-8vh) rotate(-12deg) scale(1)}80%{transform:translate(80vw,24vh) rotate(10deg) scale(.8);opacity:1}100%{transform:translate(112vw,-5vh) rotate(-10deg) scale(.45);opacity:0}}
+.flowers{position:absolute;inset:0;z-index:6}
+.flower{position:absolute;bottom:14%;font-size:25px;filter:drop-shadow(0 0 10px rgba(255,140,220,.6));animation:flower 4s ease-in-out infinite}
+@keyframes flower{50%{transform:translateY(-8px)}}
+.gardenCard{padding:42px 28px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.015));backdrop-filter:blur(12px);border-radius:28px;box-shadow:0 30px 100px rgba(0,0,0,.22)}
+.gardenCard .title{font-size:clamp(38px,6vw,72px)}
+.gardenCard .accent{color:#ffd7f3}
+
+/* 3 */
+#s3{background:radial-gradient(circle at 50% 10%,rgba(255,218,151,.75),transparent 28%),linear-gradient(180deg,#f4c38e,#f9dfbd 45%,#e8ae83);color:#4a3026}
+.sun{position:absolute;left:50%;top:8%;transform:translateX(-50%);width:170px;height:170px;border-radius:50%;background:#fff1c8;box-shadow:0 0 80px rgba(255,220,150,.8)}
+.cloud{position:absolute;width:250px;height:62px;border-radius:60px;background:rgba(255,255,255,.28);filter:blur(3px);animation:cloud 30s linear infinite}
+.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:inherit}.cloud:before{width:95px;height:95px;left:45px;bottom:15px}.cloud:after{width:75px;height:75px;right:40px;bottom:10px}
+.c1{top:25%;left:-300px}.c2{top:42%;left:-450px;animation-delay:-13s;transform:scale(.7)}
+@keyframes cloud{to{transform:translateX(calc(100vw + 800px))}}
+.letterScene{width:min(720px,94%);padding:28px}
+.letterScene .title{font-size:clamp(38px,6vw,70px);color:#59382a}
+.envelope{position:relative;width:min(440px,88vw);aspect-ratio:1.55;margin:22px auto;background:#fff9ed;border-radius:7px;box-shadow:0 25px 70px rgba(90,45,20,.25);cursor:pointer}
+.flap{position:absolute;top:0;left:0;width:100%;height:56%;background:#f7e6c9;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:1s;z-index:5}
+.envelope.open .flap{transform:rotateX(180deg)}
+.seal{position:absolute;z-index:8;left:50%;top:52%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:#9c4160;color:#ffe8c5;font-size:23px;box-shadow:0 5px 20px rgba(100,30,40,.25);transition:.7s}
+.envelope.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+.letter{position:absolute;z-index:2;left:50%;top:8%;width:88%;height:82%;transform:translateX(-50%);background:#fffdf6;color:#4a3428;padding:26px;border-radius:4px;box-shadow:0 15px 40px rgba(80,40,20,.18);opacity:0;overflow:auto;transition:1.15s;pointer-events:none}
+.envelope.open .letter{opacity:1;transform:translate(-50%,-67%);z-index:10}
+.letter h3{font-size:25px;font-weight:400;margin-bottom:15px}.letter p{font-size:14px;line-height:1.72;white-space:pre-line}
+.warmBtn{color:#57382b;border-color:rgba(80,50,30,.25);background:rgba(255,255,255,.28)}
+
+/* 4 */
+#s4{background:#020204}
+.revealStar{position:absolute;left:50%;top:42%;width:7px;height:7px;border-radius:50%;background:#fff0a7;box-shadow:0 0 18px #fff0a7,0 0 70px #ffd86a;transform:translate(-50%,-50%);animation:pulseStar 3s ease-in-out infinite}
+@keyframes pulseStar{50%{transform:translate(-50%,-50%) scale(2)}}
+.rtext{position:absolute;top:25%;left:50%;transform:translateX(-50%);width:90%;text-align:center;font-size:clamp(17px,2.2vw,25px);color:rgba(255,255,255,.7);line-height:2}
+.rline{opacity:0;animation:rise 1.4s forwards}.rline:nth-child(2){animation-delay:2s}
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+.particle{position:absolute;left:50%;top:43%;width:3px;height:3px;border-radius:50%;background:#fff1a8;box-shadow:0 0 8px #fff1a8;animation:orbit 5s linear infinite var(--delay)}
+@keyframes orbit{0%{transform:rotate(var(--a)) translateX(20px) scale(.2);opacity:0}20%{opacity:1}100%{transform:rotate(calc(var(--a) + 360deg)) translateX(var(--dist)) scale(0);opacity:0}}
+.bigName{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) scale(.25);font-size:clamp(80px,17vw,200px);font-weight:700;letter-spacing:-7px;background:linear-gradient(100deg,#fff,#ffe89b,#ffb8df,#c7b7ff,#fff);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 20px rgba(255,220,120,.45));opacity:0;animation:appear 2.2s 3.4s cubic-bezier(.16,1,.3,1) forwards,shine 6s 5.5s linear infinite}
+@keyframes appear{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.rmsg{position:absolute;top:70%;left:50%;transform:translateX(-50%);width:90%;text-align:center;font:15px/1.7 Arial,sans-serif;color:rgba(255,255,255,.67);opacity:0;animation:softin 1.5s 5.5s forwards}
+
+/* 5 */
+#s5{background:linear-gradient(180deg,#ee9c9f 0%,#efb57e 30%,#8b6cac 62%,#14152f 100%);overflow:hidden}
+.finalSun{position:absolute;left:50%;top:18%;transform:translateX(-50%);width:clamp(105px,15vw,185px);aspect-ratio:1;border-radius:50%;background:#ffe1a0;box-shadow:0 0 80px #ffd98a,0 0 190px rgba(255,180,100,.55);animation:sunFloat 10s ease-in-out infinite alternate}
+@keyframes sunFloat{to{transform:translate(-50%,20px)}}
+.finalGround{position:absolute;left:-10%;bottom:-26%;width:120%;height:43%;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at center top,#172b36,#081720 68%,#040b12)}
+.finalMoon{position:absolute;right:11%;top:11%;width:70px;aspect-ratio:1;border-radius:50%;background:#eeeaff;box-shadow:0 0 55px rgba(240,240,255,.6);opacity:0;animation:moonrise 9s 4s forwards}
+@keyframes moonrise{to{opacity:.9;transform:translateY(0)}}
+.finalCloud{position:absolute;width:300px;height:70px;border-radius:80px;background:rgba(255,220,210,.2);filter:blur(4px);animation:fcloud 38s linear infinite}
+.finalCloud:before,.finalCloud:after{content:"";position:absolute;border-radius:50%;background:inherit}.finalCloud:before{width:110px;height:110px;left:50px;bottom:10px}.finalCloud:after{width:90px;height:90px;right:45px;bottom:5px}
+.fc1{left:-350px;top:28%}.fc2{left:-500px;top:48%;animation-delay:-17s;transform:scale(.7)}
+@keyframes fcloud{to{transform:translateX(calc(100vw + 900px))}}
+.finalContent{position:absolute;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);width:min(900px,93%);text-align:center}
+.finalK{font:600 10px/1 Arial,sans-serif;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,.72);opacity:0;animation:fadeup 1.4s 1s forwards}
+.finalName{font-size:clamp(78px,16vw,190px);line-height:.9;font-weight:700;letter-spacing:-7px;background:linear-gradient(100deg,#fff,#ffe8b0,#ffc1e1,#d0c0ff,#fff);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 24px rgba(255,220,160,.45));opacity:0;transform:scale(.6);animation:finalName 2s 1.4s cubic-bezier(.16,1,.3,1) forwards,shine 7s 3.5s linear infinite}
+@keyframes finalName{to{opacity:1;transform:scale(1)}}
+.best{margin-top:18px;font:12px/1 Arial,sans-serif;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.74);opacity:0;animation:fadeup 1.4s 2.8s forwards}
+.poem{margin:25px auto 0;max-width:760px;font-size:clamp(14px,1.75vw,19px);line-height:1.7;color:rgba(255,255,255,.9);opacity:0;transform:translateY(22px);animation:fadeup 2s 3.7s forwards}
+@keyframes fadeup{to{opacity:1;transform:translateY(0)}}
+.signature{margin-top:18px;font-size:clamp(18px,2.5vw,27px);color:#fff4d0;opacity:0;animation:fadeup 1.5s 8s forwards}
+#petals{position:absolute;inset:0;z-index:4;pointer-events:none}.petal{position:absolute;font-size:18px;animation:petal 10s linear infinite var(--delay);opacity:0}
+@keyframes petal{0%{transform:translateY(-10vh) rotate(0)}10%{opacity:.7}100%{transform:translate(80px,110vh) rotate(520deg);opacity:0}}
+
+/* transition */
+#transition{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0}
+#transition.go{animation:trans 1.25s cubic-bezier(.7,0,.3,1)}
+@keyframes trans{0%{opacity:0;transform:scale(.1)}35%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.45)}}
+.ripple{position:fixed;width:15px;height:15px;border:1px solid rgba(255,255,255,.8);border-radius:50%;z-index:10000;pointer-events:none;animation:rip .8s forwards}
+@keyframes rip{to{width:220px;height:220px;margin:-110px 0 0 -110px;opacity:0}}
+
+@media(max-width:600px){
+ .kicker{letter-spacing:4px;font-size:9px}.title{font-size:42px}.sub{font-size:13px}.btn{padding:15px 24px;font-size:13px}
+ .gardenCard{padding:32px 18px}.gardenCard .title{font-size:38px}
+ .letter{padding:19px}.letter h3{font-size:21px}.letter p{font-size:12.5px;line-height:1.6}
+ .bigName,.finalName{letter-spacing:-5px}.poem{font-size:14px;line-height:1.6;max-height:49vh;overflow:auto;padding:0 6px}
+ .best{letter-spacing:2.5px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="app">
+
+<section class="scene active" id="s1">
+ <div class="neb n1"></div><div class="neb n2"></div><div class="moon"></div><div id="stars"></div>
+ <div class="shoot a"></div><div class="shoot b"></div><div class="noise"></div>
+ <div class="center">
+  <div class="kicker">A little secret for someone special</div>
+  <h1 class="title s1title">I made something<br>for you...</h1>
+  <div class="sub">Not a normal message. Not a normal surprise.<br>Just a tiny journey for one crazy, wonderful friend.</div>
+  <button class="btn next" data-to="s2">Begin the Journey ✨</button>
+  <div class="secret">P.S. — yes, this is actually for you, Rey.</div>
+ </div>
+</section>
+
+<section class="scene" id="s2">
+ <div class="gmoon"></div><div id="fires"></div>
+ <div class="flowers"><div class="flower" style="left:12%">✿</div><div class="flower" style="left:29%;bottom:11%">✦</div><div class="flower" style="right:25%">✿</div><div class="flower" style="right:10%;bottom:18%">✧</div></div>
+ <div class="bfly" style="top:30%;--d:14s;--delay:0s">🦋</div><div class="bfly" style="top:62%;--d:17s;--delay:3s">🦋</div><div class="bfly" style="top:45%;--d:12s;--delay:6s">🦋</div>
+ <div class="center gardenCard">
+  <div class="kicker">Chapter II · The person behind the smile</div>
+  <h1 class="title">Some people make<br><span class="accent">ordinary days feel extraordinary.</span></h1>
+  <div class="sub">And then there are the completely crazy ones who can talk about absolutely anything, make you laugh for no reason, and somehow still surprise you with how seriously they live their life.</div>
+  <button class="btn next" data-to="s3">Are You Ready, Rey? 🦋</button>
+ </div>
+</section>
+
+<section class="scene" id="s3">
+ <div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div><div class="noise"></div>
+ <div class="center letterScene">
+  <div class="kicker" style="color:rgba(65,40,30,.55)">Chapter III · A few words I don't say enough</div>
+  <h1 class="title">A little letter<br>for Rey...</h1>
+  <div class="envelope" id="envelope">
+   <div class="letter">
+    <h3>Dear Rey,</h3>
+    <p>You're honestly one of the craziest friends I've ever met — and I mean that in the best possible way.
+
+You're open-minded, easy to talk to, funny, and somehow you can turn even the most random conversation into something memorable.
+
+But beyond all the craziness, there is something I genuinely admire about you.
+
+Whatever you decide to do in your life, you do it with dedication.
+
+And the thing I respect most is the way you value your parents. The respect you give them says a lot about the person you are, because family and the values we carry are among the most important things in life.
+
+You have this beautiful combination of being fun, fearless and completely yourself — while still having a strong sense of what is right.
+
+That's rare.
+
+And honestly, that's what makes you special.
+
+— From your friend who is very lucky to know you ✨</p>
+   </div>
+   <div class="flap"></div><div class="seal">✦</div>
+  </div>
+  <button class="btn warmBtn" id="open">Open it ✉️</button>
+  <button class="btn warmBtn" id="continue" style="display:none">There's one more thing...</button>
+ </div>
+</section>
+
+<section class="scene" id="s4">
+ <div class="revealStar"></div><div id="particles"></div>
+ <div class="rtext"><div class="rline">One last thing...</div><div class="rline">Some names deserve their own universe.</div></div>
+ <div class="bigName">Rey ✨</div>
+ <div class="rmsg">Because you're not just someone I know.<br>You're one of those people whose presence becomes a beautiful part of the story.<br><br><button class="btn next" data-to="s5">There is something I want you to know ✨</button></div>
+</section>
+
+<section class="scene" id="s5">
+ <div class="finalSun"></div><div class="finalMoon"></div><div class="finalCloud fc1"></div><div class="finalCloud fc2"></div>
+ <div class="starsFinal" id="finalStars"></div><div id="petals"></div><div class="finalGround"></div><div id="finalFires"></div>
+ <div class="bfly" style="top:30%;--d:15s;--delay:2s">🦋</div><div class="bfly" style="top:56%;--d:18s;--delay:7s">🦋</div>
+ <div class="finalContent">
+  <div class="finalK">For my best friend</div>
+  <div class="finalName">Rey ✨</div>
+  <div class="best">Suprita · the girl behind the nickname</div>
+  <div class="poem">
+   Some people come into your life<br>and simply become a memory.<br><br>
+   And then there are people like you —<br>the ones who become a feeling.<br><br>
+   You're crazy enough to make conversations unforgettable,<br>
+   funny enough to make ordinary moments better,<br>
+   open-minded enough to understand without judging,<br>
+   and strong enough to chase what you want with dedication.<br><br>
+   I admire the way you respect your parents,<br>
+   the values you carry,<br>
+   and the person you're becoming.<br><br>
+   And now, I have one last prediction for you...<br><br>
+   I don't know if someone has ever told you this,<br>
+   and honestly, maybe you have no taste if they haven't —<br>
+   but I'll tell you anyway.<br><br>
+   <strong>You're beautiful now.</strong><br>
+   But as you grow a little more mature,<br>
+   more confident and more knowledgeable,<br>
+   I genuinely believe you're going to become<br>
+   <strong>even more beautiful, gorgeous, and impossible to ignore.</strong><br><br>
+   Because the best kind of beauty<br>
+   is the one that comes with a beautiful mind.<br><br>
+   So keep being your crazy, funny, dedicated,<br>
+   wonderfully unique self.<br>
+   Don't change the things that make you, <strong>you.</strong>
+  </div>
+  <div class="signature">Rey ✨ — stay exactly this wonderfully crazy.</div>
+ </div>
+</section>
+</div>
+<div id="transition"></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+let current="s1", reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const transition=$("#transition");
+
+function switchTo(id){
+ if(id===current)return;
+ transition.style.background =
+   current==="s1"?"radial-gradient(circle,#fff,#c8baff 10%,#05030d 60%)":
+   current==="s2"?"radial-gradient(circle,#fff,#ffe7f5 10%,#0d061c 65%)":
+   current==="s3"?"radial-gradient(circle,#fff,#ffd99b 12%,#180b05 65%)":
+   "radial-gradient(circle,#fff,#ffe89b 10%,#020204 65%)";
+ transition.classList.remove("go"); void transition.offsetWidth; transition.classList.add("go");
+ const old=$("#"+current), next=$("#"+id);
+ old.classList.remove("active");
+ setTimeout(()=>{next.classList.add("active");current=id;if(id==="s4")makeParticles()},420);
+}
+
+$$(".next").forEach(b=>b.addEventListener("click",e=>{ripple(e);switchTo(b.dataset.to)}));
+
+function ripple(e){
+ const r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),850)
+}
+
+/* stars */
+for(let i=0;i<300;i++){let x=document.createElement("i");x.className="star";x.style.left=Math.random()*100+"%";x.style.top=Math.random()*100+"%";x.style.setProperty("--d",2+Math.random()*5+"s");x.style.setProperty("--delay",-Math.random()*5+"s");$("#stars").appendChild(x)}
+
+/* garden fireflies */
+for(let i=0;i<45;i++){let x=document.createElement("i");x.className="fire";x.style.left=Math.random()*100+"%";x.style.top=30+Math.random()*60+"%";x.style.setProperty("--d",2+Math.random()*5+"s");x.style.setProperty("--x",-60+Math.random()*120+"px");x.style.setProperty("--y",-60+Math.random()*120+"px");x.style.animationDelay=-Math.random()*5+"s";$("#fires").appendChild(x)}
+
+/* letter */
+let opened=false;
+$("#open").onclick=e=>{ripple(e);if(opened)return;opened=true;$("#envelope").classList.add("open");$("#open").style.display="none";setTimeout(()=>$("#continue").style.display="inline-block",1700)};
+$("#continue").onclick=e=>{ripple(e);switchTo("s4")};
+
+/* reveal particles */
+function makeParticles(){
+ $("#particles").innerHTML="";
+ for(let i=0;i<150;i++){let p=document.createElement("i");p.className="particle";p.style.setProperty("--a",Math.random()*360+"deg");p.style.setProperty("--dist",100+Math.random()*430+"px");p.style.setProperty("--delay",Math.random()*3+"s");$("#particles").appendChild(p)}
+}
+
+/* final stars & fireflies & petals */
+for(let i=0;i<130;i++){let s=document.createElement("i");s.className="star";s.style.left=Math.random()*100+"%";s.style.top=Math.random()*67+"%";s.style.setProperty("--d",3+Math.random()*6+"s");s.style.setProperty("--delay",Math.random()*6+"s");$("#finalStars").appendChild(s)}
+for(let i=0;i<35;i++){let f=document.createElement("i");f.className="fire";f.style.left=Math.random()*100+"%";f.style.top=55+Math.random()*40+"%";f.style.setProperty("--d",2+Math.random()*5+"s");f.style.setProperty("--x",-50+Math.random()*100+"px");f.style.setProperty("--y",-80+Math.random()*80+"px");$("#finalFires").appendChild(f)}
+for(let i=0;i<24;i++){let p=document.createElement("i");p.className="petal";p.textContent=Math.random()>.5?"✦":"✿";p.style.left=Math.random()*100+"%";p.style.top=-10-Math.random()*30+"%";p.style.setProperty("--delay",-Math.random()*10+"s");$("#petals").appendChild(p)}
+
+/* parallax */
+function parallax(x,y){
+ if(reduced)return;
+ const px=(x/innerWidth-.5),py=(y/innerHeight-.5);
+ $$(".neb,.moon,.gmoon,.finalSun").forEach(el=>{el.style.marginLeft=px*12+"px";el.style.marginTop=py*12+"px"})
+}
+addEventListener("mousemove",e=>parallax(e.clientX,e.clientY),{passive:true});
+addEventListener("touchmove",e=>{if(e.touches[0])parallax(e.touches[0].clientX,e.touches[0].clientY)},{passive:true});
+</script>
+</body>
+</html>
